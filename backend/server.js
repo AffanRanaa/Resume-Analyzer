@@ -11,13 +11,13 @@
   const authRoutes = require('./routes/auth');
   const resumeRoutes = require('./routes/resumes');
   const analyzeRoutes = require('./routes/analyze');
-  //const paymentRoutes = require('./routes/payment');
-  //const { handleWebhook } = require('./controllers/paymentController');
+  const paymentRoutes = require('./routes/payment');
+  const { handleWebhook } = require('./controllers/paymentController');
 
   const app = express();
 
   // Stripe webhook — must be before express.json()
-  //app.post('/api/webhook', express.raw({ type: 'application/json' }), handleWebhook);
+  app.post('/api/webhook', express.raw({ type: 'application/json' }), handleWebhook);
 
   app.use(express.json());
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
@@ -27,7 +27,7 @@
   app.use('/api/auth', authRoutes);
   app.use('/api/resumes', resumeRoutes);
   app.use('/api/analyze', analyzeRoutes);
-  //app.use('/api/payment', paymentRoutes);
+  app.use('/api/payment', paymentRoutes);
 
   app.get('/', (req, res) => {
     res.json({ message: 'Resume Analyzer API is running' });
